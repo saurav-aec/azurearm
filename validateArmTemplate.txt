@@ -1,0 +1,16 @@
+# Command to validate template-file "azuredeploy.json"
+
+az deployment group validate --resource-group pluralsight-resource-group --template-file azuredeploy.json --parameters adminPublicKey="$(cat ~/.ssh/id_rsa.pub)"
+
+
+# Command to deploy template-file
+
+az deployment group create --resource-group pluralsight-resource-group --template-file azuredeploy.json --parameters adminPublicKey="$(cat ~/.ssh/id_rsa.pub)"
+
+# Command to view the VM deployed
+
+az vm list --resource-group pluralsight-resource-group --output table
+
+# Command to install an custom script extension
+
+az vm extension set --resource-group pluralsight-resource-group --vm-name armTemplate-vm --name customScript --publisher Microsoft.Azure.Extensions --version 2.0 --settings '{"fileUris":["https://raw.githubusercontent.com/ps-interactive/azure-arm-template/master/install-nginx.sh"]}' --protected-settings '{"commandToExecute": "./install-nginx.sh"}'
